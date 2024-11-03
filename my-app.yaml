@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+  namespace: argocd  # Dit blijft 'argocd' zodat ArgoCD de applicatie beheert
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Martijnhofstra/my-app'
+    targetRevision: main  # De branch/tag die je wilt gebruiken
+    path: .  # Het pad in de repo waar de manifests staan
+  destination:
+    server: 'https://kubernetes.default.svc'  # Standaard Kubernetes-cluster
+    namespace: web-namespace  # De namespace waarin je de app wilt implementeren
+  syncPolicy:
+    automated:
+      prune: true  # Verwijder resources die niet meer in de repo staan
+      selfHeal: true  # Herstel automatisch verschillen tussen live en gewenste staat
